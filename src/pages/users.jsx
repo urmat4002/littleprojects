@@ -1,5 +1,13 @@
 import {useEffect, useState} from 'react'
-import {Button, Card, Form, Image, InputGroup, ListGroup} from 'react-bootstrap'
+import {
+  Button,
+  Card,
+  Container,
+  Form,
+  Image,
+  InputGroup,
+  ListGroup,
+} from 'react-bootstrap'
 import {fetchDevices} from '../http/deviceApi'
 
 export const Users = () => {
@@ -19,8 +27,6 @@ export const Users = () => {
     setDisplayUsers(data)
   }, [input])
 
-  const searchChange = () => {}
-
   const addHandle = (id) => {
     setInvitedUsers([...invitedUsers, id])
     console.log(invitedUsers)
@@ -30,55 +36,56 @@ export const Users = () => {
     setInvitedUsers(filtered)
   }
   return (
-    <Card style={{width: '350px'}}>
-      <Card.Body style={{display: 'flex', flexDirection: 'column'}}>
+    <Container
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '10px',
+      }}
+    >
+      <Card style={{width: '350px', padding: '10px'}}>
         <InputGroup className="mb-3">
           <InputGroup.Text>Search</InputGroup.Text>
           <Form.Control onChange={(e) => setInput(e.target.value)} />
         </InputGroup>
-
-        <ListGroup as="ul">
-          {displayUsers.map((item, index) => (
-            <ListGroup.Item
-              key={index}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                margin: '',
-              }}
-            >
-              <div style={{width: '50px'}}>
-                <Image
-                  style={{width: '100%', borderRadius: '50%'}}
-                  key={index}
-                  src={item.avatar}
-                />
-              </div>
-              <div>
-                <h4>{item.first_name + ' ' + item.last_name}</h4>
-                <p>{item.email}</p>
-              </div>
-              {invitedUsers.includes(item.id) ? (
-                <div
-                  style={{cursor: 'pointer'}}
-                  onClick={() => deleteHandle(item.id)}
-                >
-                  -
-                </div>
-              ) : (
-                <div
-                  style={{cursor: 'pointer'}}
-                  onClick={() => addHandle(item.id)}
-                >
-                  +
-                </div>
-              )}
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
         <Button style={{margin: '10px'}}>Send invite</Button>
-      </Card.Body>
-    </Card>
+      </Card>
+      <div style={{display: 'flex', flexWrap: 'wrap'}}>
+        {displayUsers.map((item, index) => (
+          <Card
+            key={index}
+            style={{margin: '10px', padding: '10px', width: '200px'}}
+          >
+            <div style={{width: '50px'}}>
+              <Image
+                style={{width: '100%', borderRadius: '50%'}}
+                key={index}
+                src={item.avatar}
+              />
+            </div>
+            <div>
+              <h4>{item.first_name + ' ' + item.last_name}</h4>
+              <p>{item.email}</p>
+            </div>
+            {invitedUsers.includes(item.id) ? (
+              <div
+                style={{cursor: 'pointer'}}
+                onClick={() => deleteHandle(item.id)}
+              >
+                -
+              </div>
+            ) : (
+              <div
+                style={{cursor: 'pointer'}}
+                onClick={() => addHandle(item.id)}
+              >
+                +
+              </div>
+            )}
+          </Card>
+        ))}
+      </div>
+    </Container>
   )
 }
