@@ -8,9 +8,12 @@ import {
   InputGroup,
   ListGroup,
 } from 'react-bootstrap'
+import {Invite} from '../Components/Users/inviteComponent'
+import {UserList} from '../Components/Users/UsersList'
 import {fetchDevices} from '../http/deviceApi'
 
 export const Users = () => {
+  const [success, setSuccess] = useState(false)
   const [input, setInput] = useState('')
   const [users, setUsers] = useState([])
   const [displayUsers, setDisplayUsers] = useState([])
@@ -29,63 +32,42 @@ export const Users = () => {
 
   const addHandle = (id) => {
     setInvitedUsers([...invitedUsers, id])
-    console.log(invitedUsers)
   }
   const deleteHandle = (id) => {
     const filtered = invitedUsers.filter((item) => id !== item)
     setInvitedUsers(filtered)
   }
   return (
-    <Container
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '10px',
-      }}
-    >
-      <Card style={{width: '350px', padding: '10px'}}>
-        <InputGroup className="mb-3">
-          <InputGroup.Text>Search</InputGroup.Text>
-          <Form.Control onChange={(e) => setInput(e.target.value)} />
-        </InputGroup>
-        <Button style={{margin: '10px'}}>Send invite</Button>
-      </Card>
-      <div style={{display: 'flex', flexWrap: 'wrap'}}>
-        {displayUsers.map((item, index) => (
-          <Card
-            key={index}
-            style={{margin: '10px', padding: '10px', width: '200px'}}
-          >
-            <div style={{width: '50px'}}>
-              <Image
-                style={{width: '100%', borderRadius: '50%'}}
-                key={index}
-                src={item.avatar}
-              />
-            </div>
-            <div>
-              <h4>{item.first_name + ' ' + item.last_name}</h4>
-              <p>{item.email}</p>
-            </div>
-            {invitedUsers.includes(item.id) ? (
-              <div
-                style={{cursor: 'pointer'}}
-                onClick={() => deleteHandle(item.id)}
-              >
-                -
-              </div>
-            ) : (
-              <div
-                style={{cursor: 'pointer'}}
-                onClick={() => addHandle(item.id)}
-              >
-                +
-              </div>
-            )}
+    <Container>
+      {success ? (
+        <Invite setSuccess={setSuccess} invitedUsers={invitedUsers} />
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '10px',
+          }}
+        >
+          <Card style={{width: '350px', padding: '10px'}}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>Search</InputGroup.Text>
+              <Form.Control onChange={(e) => setInput(e.target.value)} />
+            </InputGroup>
+            <Button style={{margin: '10px'}} onClick={() => setSuccess(true)}>
+              Send invite
+            </Button>
           </Card>
-        ))}
-      </div>
+
+          <UserList
+            addHandle={addHandle}
+            displayUsers={displayUsers}
+            invitedUsers={invitedUsers}
+            deleteHandle={deleteHandle}
+          />
+        </div>
+      )}
     </Container>
   )
 }

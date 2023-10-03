@@ -6,10 +6,13 @@ export const NavBar = () => {
   return (
     <Navbar bg="dark" data-bs-theme="dark">
       <Container>
-        <Navbar.Brand to="/">Home</Navbar.Brand>
+        <Navbar.Brand onClick={() => navigate('/')}>Home</Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link onClick={() => navigate('/counter')}>Counter</Nav.Link>
           <Nav.Link onClick={() => navigate('/users')}>Users</Nav.Link>
+          <Nav.Link onClick={() => navigate('/converter')}>
+            Money converter
+          </Nav.Link>
         </Nav>
       </Container>
     </Navbar>
